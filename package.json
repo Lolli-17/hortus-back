@@ -1,0 +1,26 @@
+{
+  "name": "hortus-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lolli-17/hortus-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lolli-17/hortus-back/issues"
+  },
+  "homepage": "https://github.com/Lolli-17/hortus-back#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "axios": "^1.13.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  }
+}

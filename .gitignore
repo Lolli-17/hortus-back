@@ -1,0 +1,15 @@
+# Ignora le API Keys e le variabili d'ambiente
+# FONDAMENTALE per la sicurezza! Non caricare mai le tue chiavi su GitHub.
+.env
+
+# Ignora la cartella delle dipendenze di Node.js
+# Questa cartella è enorme e può essere rigenerata con 'npm install'
+node_modules/
+
+# File di log generici
+*.log
+npm-debug.log*
+
+# File di sistema del sistema operativo
+.DS_Store
+Thumbs.db
