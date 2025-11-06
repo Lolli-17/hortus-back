@@ -8,10 +8,8 @@ const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Carica TUTTI i prompt qui
-const PROMPT_NOTIZIE = fs.readFileSync(path.join(process.cwd(), 'prompt_template_notizie.txt'), 'utf8');
-const PROMPT_CHAT = fs.readFileSync(path.join(process.cwd(), 'prompt_template_chat.txt'), 'utf8');
-
+const PROMPT_NOTIZIE = fs.readFileSync(path.join(__dirname, '..', 'prompt_template_notizie.txt'), 'utf8');
+const PROMPT_CHAT = fs.readFileSync(path.join(__dirname, '..', 'prompt_template_chat.txt'), 'utf8');
 
 // Servizio 1: Analisi Sentiment Notizie
 async function analyzeNewsSentiment(articles) {
