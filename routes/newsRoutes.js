@@ -23,7 +23,7 @@ router.get('/:section', async (req, res) => {
         sorgente: "API Backend Node.js",
         sezione: section,
         analisi_ia: analysis,
-        articoli: articles 
+        // articoli: articles, 
     });
 });
 
