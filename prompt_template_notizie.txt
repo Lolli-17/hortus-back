@@ -1,38 +1,50 @@
-Il tuo compito è analizzare un blocco di notizie di cronaca. Per ogni notizia fornita, devi restituire un oggetto JSON con la tua analisi del sentiment.
+Il tuo compito è analizzare un blocco di notizie di cronaca. Devi restituire un **singolo oggetto JSON** che contenga due chiavi principali: "analisi_generale" e "analisi_individuale".
 
-L'analisi per ogni notizia deve includere:
-1.  "sentiment": uno tra "Felicità", "Tranquillità", "Calma" e i loro opposti "Tristezza", "Paura", "Rabbia".
-2.  "score_negatività": un punteggio da 0 (per nulla negativo) a 10 (estremamente negativo).
-3.  "categoria": una categoria tematica (es. "Economia", "Criminalità", "Politica", "Ambiente", "Guerra", "Società").
-4.  "id_notizia": l'ID numerico della notizia che stai analizzando.
+1.  **"analisi_generale"** (Oggetto): Deve contenere la tua sintesi dell'intero blocco di notizie.
+    * `sentiment_complessivo`: Un singolo sentiment (es. "Rabbia", "Tranquillità", "Felicità") che descrive il "clima" generale di tutte le notizie.
+    * `media_score_negatività`: La media matematica approssimativa di tutti gli score di negatività (da 0 a 10).
+    * `categoria_dominante`: La categoria tematica più frequente nel blocco di notizie.
 
-Restituisci **solo e unicamente un array JSON** che contiene gli oggetti di analisi per ogni notizia.
+2.  **"analisi_individuale"** (Array): Deve contenere un oggetto JSON per ogni singola notizia analizzata.
+    * `sentiment`: Uno tra "Felicità", "Tranquillità", "Calma" e i loro opposti "Tristezza", "Paura", "Rabbia".
+    * `score_negatività`: Un punteggio da 0 a 10.
+    * `categoria`: La categoria tematica della notizia.
+    * `id_notizia`: L'ID numerico della notizia.
+
+Restituisci **solo e unicamente l'oggetto JSON completo** che contiene entrambe le chiavi.
 
 ---
-ESEMPIO DI FORMATO DELLA RISPOSTA (JSON ARRAY):
-[
-  {
-    "id_notizia": 1,
-    "sentiment": "Paura",
-    "score_negatività": 9,
-    "categoria": "Criminalità"
+ESEMPIO DI FORMATO DELLA RISPOSTA (OGGETTO JSON):
+{
+  "analisi_generale": {
+    "sentiment_complessivo": "Paura",
+    "media_score_negatività": 6.5,
+    "categoria_dominante": "Criminalità"
   },
-  {
-    "id_notizia": 2,
-    "sentiment": "Calma",
-    "score_negatività": 2,
-    "categoria": "Politica"
-  },
-  {
-    "id_notizia": 3,
-    "sentiment": "Felicità",
-    "score_negatività": 1,
-    "categoria": "Società"
-  }
-]
+  "analisi_individuale": [
+    {
+      "id_notizia": 1,
+      "sentiment": "Paura",
+      "score_negatività": 9,
+      "categoria": "Criminalità"
+    },
+    {
+      "id_notizia": 2,
+      "sentiment": "Calma",
+      "score_negatività": 2,
+      "categoria": "Politica"
+    },
+    {
+      "id_notizia": 3,
+      "sentiment": "Tristezza",
+      "score_negatività": 8,
+      "categoria": "Società"
+    }
+  ]
+}
 ---
 
-Ora analizza il seguente blocco di notizie. Rispondi solo con l'array JSON.
+Ora analizza il seguente blocco di notizie. Rispondi solo con l'oggetto JSON.
 
 NOTIZIE DA ANALIZZARE:
 {{ARTICOLI_QUI}}
