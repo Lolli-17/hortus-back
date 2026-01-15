@@ -3,6 +3,41 @@ const router = express.Router();
 const { getTopStories } = require('../services/nytService');
 const { analyzeNewsSentiment } = require('../services/haikuService');
 
+function checkHortusActiveWindow() {
+    const now = new Date();
+    
+    // Convertiamo l'ora in UTC per evitare problemi di fuso orario
+    // Creiamo una stringa univoca per oggi: "2023-10-25"
+    const dateString = now.toISOString().split('T')[0];
+
+    // --- MAGIA DEL "CASO DETERMINISTICO" ---
+    // Trasformiamo la stringa della data in un numero
+    let seed = 0;
+    for (let i = 0; i < dateString.length; i++) {
+        seed = ((seed << 5) - seed) + dateString.charCodeAt(i);
+        seed |= 0; // Converte in 32bit integer
+    }
+    
+    // Rendiamo il numero positivo
+    seed = Math.abs(seed);
+
+    // Ci sono 1440 minuti in un giorno.
+    // Usiamo il seed per scegliere un minuto di inizio (tra 0 e 1430)
+    const startMinuteOfDay = seed % 1430; 
+    
+    // Calcoliamo il minuto attuale del giorno (es. 14:00 = 840)
+    const currentMinuteOfDay = (now.getUTCHours() * 60) + now.getUTCMinutes();
+
+    // Controlliamo se siamo nei 10 minuti fortunati
+    const isActive = currentMinuteOfDay >= startMinuteOfDay && currentMinuteOfDay < (startMinuteOfDay + 10);
+
+    return {
+        isActive: isActive,
+        startMinute: startMinuteOfDay, // Solo per debug
+        currentMinute: currentMinuteOfDay // Solo per debug
+    };
+}
+
 router.get('/:section', async (req, res) => {
     const { section } = req.params;
     
