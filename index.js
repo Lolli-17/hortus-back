@@ -23,6 +23,10 @@ app.use(cors());
 // Collega il router delle notizie al percorso /api/notizie
 app.use('/api/notizie', newsRoutes);
 
+app.get("/health", (req, res) => {
+    res.status(200).send("OK (Server is awake!)");
+});
+
 // Collega il router della chat al percorso /api/chat
 app.use('/api/chat', chatRoutes);
 
