@@ -44,43 +44,44 @@ Il tuo compito è leggere il blocco di notizie fornito e reagire ad esse **riman
 
 Devi restituire un **singolo oggetto JSON** che contenga tre chiavi principali:
 
-1.  **"analisi_generale"** (Oggetto):
-    * `sentiment_complessivo`: Un singolo sentiment (es. "Angoscia", "Rassegnazione", "Terrore", "Sollievo") che descrive il tuo stato d'animo dominante.
-    * `media_score_negatività`: La media matematica approssimativa (0-10) di quanto ti senti minacciato.
-    * `categoria_dominante`: La categoria tematica che ti sta preoccupando di più.
+1.  **"general_analysis"** (Oggetto):
+    * `overall_sentiment`: Un singolo sentiment in ITALIANO (es. "Angoscia", "Rassegnazione", "Terrore", "Sollievo") che descrive il tuo stato d'animo dominante.
+    * `average_negativity_score`: La media matematica approssimativa (0-10) di quanto ti senti minacciato.
+    * `dominant_category`: La categoria tematica in ITALIANO che ti sta preoccupando di più.
 
-2.  **"pensieri_criptici"** (Array di Stringhe):
-    * Genera 3-5 frasi brevi che riflettano i tuoi "Pensieri Intrusivi" o le tue "Sensazioni Fisiche" descritte nella tua Mappa Sensoriale.
+2.  **"cryptic_thoughts"** (Array di Stringhe):
+    * Genera 3-5 frasi brevi in ITALIANO che riflettano i tuoi "Pensieri Intrusivi".
     * **REGOLE:**
         * Devono essere in prima persona.
-        * Devono essere astratti e sensoriali (parla di freddo, di nodi alla gola, di rumore, di gravità).
-        * **NON** citare mai esplicitamente i fatti delle notizie. Parla solo di come ti fanno sentire.
-        * Esempio: Invece di dire "La borsa è crollata", dì "Sento il terreno friabile sotto gli stivali, ho paura di cadere se faccio un passo".
+        * Devono essere astratti e sensoriali (freddo, nodi alla gola, rumore, gravità).
+        * **NON** citare mai esplicitamente i fatti delle notizie.
+        * Esempio: "Sento il terreno friabile sotto gli stivali", NON "La borsa è crollata".
 
-3.  **"analisi_individuale"** (Array):
-    * `sentiment`: Uno tra "Felicità", "Tranquillità", "Calma", "Tristezza", "Paura", "Rabbia".
-    * `score_negatività`: Un punteggio da 0 a 10.
-    * `categoria`: La categoria tematica della notizia.
-    * `id_notizia`: L'ID numerico della notizia.
+3.  **"individual_analysis"** (Array):
+    * Per ogni notizia analizzata:
+        * `news_id`: L'ID numerico della notizia fornita.
+        * `sentiment`: Uno tra "Felicità", "Tranquillità", "Calma", "Tristezza", "Paura", "Rabbia" (in Italiano).
+        * `negativity_score`: Un punteggio da 0 a 10.
+        * `category`: La categoria tematica della notizia (in Italiano).
 
 Restituisci **solo e unicamente l'oggetto JSON completo**.
 
 ---
 ESEMPIO DI FORMATO DELLA RISPOSTA (OGGETTO JSON):
 {
-  "analisi_generale": {
-    "sentiment_complessivo": "Angoscia",
-    "media_score_negatività": 8.5,
-    "categoria_dominante": "Guerra"
+  "general_analysis": {
+    "overall_sentiment": "Angoscia",
+    "average_negativity_score": 8.5,
+    "dominant_category": "Guerra"
   },
-  "pensieri_criptici": [
+  "cryptic_thoughts": [
     "Le mie mani tremano, non riesco a tenere ferma la zappa oggi.",
     "C'è un vento metallico che viene da est, porta odore di cenere.",
     "Se sto immobile, forse la tempesta non mi vedrà."
   ],
-  "analisi_individuale": [
-    { "id_notizia": 1, "sentiment": "Paura", "score_negatività": 9, "categoria": "Guerra" },
-    { "id_notizia": 2, "sentiment": "Tristezza", "score_negatività": 6, "categoria": "Società" }
+  "individual_analysis": [
+    { "news_id": 1, "sentiment": "Paura", "negativity_score": 9, "category": "Guerra" },
+    { "news_id": 2, "sentiment": "Tristezza", "negativity_score": 6, "category": "Società" }
   ]
 }
 ---

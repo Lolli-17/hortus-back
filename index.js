@@ -4,6 +4,7 @@ require('dotenv').config();
 // Importa le tue rotte
 const newsRoutes = require('./routes/newsRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const { checkHortusActiveWindow, formatTimeInZone } = require('./services/timeService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,6 +26,32 @@ app.use('/api/notizie', newsRoutes);
 
 app.get("/health", (req, res) => {
     res.status(200).send("OK (Server is awake!)");
+});
+
+app.get("/status", (req, res) => {
+    const status = checkHortusActiveWindow();
+    const romeZone = 'Europe/Rome';
+    const utcZone = 'UTC';
+
+    const startUtc = formatTimeInZone(status.startMinute, utcZone);
+    const endUtc = formatTimeInZone(status.startMinute + 10, utcZone);
+    const startIt = formatTimeInZone(status.startMinute, romeZone);
+    const endIt = formatTimeInZone(status.startMinute + 10, romeZone);
+
+    const now = new Date();
+    const nowUtc = now.toLocaleTimeString('en-GB', { timeZone: utcZone, hour: '2-digit', minute: '2-digit' });
+    const nowIt = now.toLocaleTimeString('en-GB', { timeZone: romeZone, hour: '2-digit', minute: '2-digit' });
+
+    res.json({
+        is_active: status.isActive,
+        current_time: { utc: nowUtc, italy: nowIt },
+        active_window: {
+            duration_minutes: 10,
+            utc: { start: startUtc, end: endUtc },
+            italy: { start: startIt, end: endIt }
+        },
+        message: status.isActive ? "SYSTEM ACTIVE ⚡️" : `System sleeping.`
+    });
 });
 
 // Collega il router della chat al percorso /api/chat
