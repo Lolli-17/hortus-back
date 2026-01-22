@@ -64,10 +64,10 @@ router.get('/:section', async (req, res) => {
     }
 
 	const responseData = {
-        sorgente: "API Backend Node.js",
+        source: "API Backend Node.js",
         hortus_active: isModeActive, 
-        sezione: section,
-        analisi_ia: analysis,
+        section: section,
+        ai_analysis: analysis,
     };
 
     cache = {
