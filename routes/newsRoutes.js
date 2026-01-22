@@ -18,7 +18,7 @@ router.get('/:section', async (req, res) => {
 
     const forceActive = req.query.debug === 'true'; 
     const hortusStatus = checkHortusActiveWindow();
-    const isModeActive = hortusStatus.isActive || forceActive;
+    const currentIsActive = hortusStatus.isActive || forceActive;
 
     if (cache.data && 
         cache.section === section && 
@@ -43,7 +43,7 @@ router.get('/:section', async (req, res) => {
 
     let analysis;
 
-    if (isModeActive) {
+    if (currentIsActive) {
         console.log("⚡️ HORTUS ATTIVO: Sto chiamando l'IA per l'analisi...");
         analysis = await analyzeNewsSentiment(articles);
     } else {
@@ -70,7 +70,7 @@ router.get('/:section', async (req, res) => {
 
 	const responseData = {
         source: "API Backend Node.js",
-        hortus_active: isModeActive, 
+        hortus_active: currentIsActive, 
         section: section,
         ai_analysis: analysis,
     };
