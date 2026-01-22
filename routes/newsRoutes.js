@@ -7,7 +7,8 @@ const { checkHortusActiveWindow } = require('../services/timeService');
 let cache = {
     data: null,      // Qui salviamo la risposta pronta
     lastFetch: 0,    // Quando l'abbiamo salvata
-    section: null    // Per quale sezione (es. "world")
+    section: null,    // Per quale sezione (es. "world")
+    wasActive: false
 };
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minuti in millisecondi
 
@@ -15,7 +16,15 @@ router.get('/:section', async (req, res) => {
     const { section } = req.params;
     const now = Date.now();
 
-    if (cache.data && cache.section === section && (now - cache.lastFetch < CACHE_DURATION)) {
+    const forceActive = req.query.debug === 'true'; 
+    const hortusStatus = checkHortusActiveWindow();
+    const isModeActive = hortusStatus.isActive || forceActive;
+
+    if (cache.data && 
+        cache.section === section && 
+        (now - cache.lastFetch < CACHE_DURATION) &&
+        cache.wasActive === currentIsActive
+    ) {
         console.log("🚀 CACHE HIT: Restituisco dati salvati istantaneamente.");
         
         const currentStatus = checkHortusActiveWindow();
@@ -28,10 +37,6 @@ router.get('/:section', async (req, res) => {
     }
 
     console.log("🐢 CACHE MISS: Devo scaricare notizie e interrogare l'IA...");
-
-    const forceActive = req.query.debug === 'true'; 
-    const hortusStatus = checkHortusActiveWindow();
-    const isModeActive = hortusStatus.isActive || forceActive;
 
     const articles = await getTopStories(section);
     if (!articles) return res.status(500).json({ error: "No NYT" });
@@ -73,7 +78,8 @@ router.get('/:section', async (req, res) => {
     cache = {
         data: responseData,
         lastFetch: now,
-        section: section
+        section: section,
+        wasActive: currentIsActive,
     };
 
     res.json(responseData);
