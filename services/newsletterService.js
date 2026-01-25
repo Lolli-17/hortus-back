@@ -16,8 +16,8 @@ async function subscribeToMailerLite(email) {
             'Accept': 'application/json'
         },
         body: JSON.stringify({
+            "groups": ["177583144646477616"],
             email: email,
-            // groups: ['123456789'] // Se volessi aggiungerli a un gruppo specifico, lo metteresti qui
         })
     });
 
