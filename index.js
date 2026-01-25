@@ -4,6 +4,7 @@ require('dotenv').config();
 // Importa le tue rotte
 const newsRoutes = require('./routes/newsRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const newsletterRoutes = require('./routes/newsletterRoutes');
 const { checkHortusActiveWindow, formatTimeInZone } = require('./services/timeService');
 
 const app = express();
@@ -56,6 +57,8 @@ app.get("/status", (req, res) => {
 
 // Collega il router della chat al percorso /api/chat
 app.use('/api/chat', chatRoutes);
+
+app.use('/api/newsletter', newsletterRoutes);
 
 
 // --- AVVIO DEL SERVER ---
