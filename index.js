@@ -10,19 +10,59 @@ const { checkHortusActiveWindow, formatTimeInZone } = require('./services/timeSe
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// --- MIDDLEWARE ---
-// Abilita il server a leggere JSON inviati nel "body"
-// FONDAMENTALE per la chat!
 app.use(express.json()); 
 
-// Abilita CORS (Accesso da altri domini)
-// FONDAMENTALE perché il tuo React (su Netlify) chiami questa API (su Render)
 const cors = require('cors');
 app.use(cors());
 
 
-// --- REGISTRAZIONE DELLE ROTTE ---
-// Collega il router delle notizie al percorso /api/notizie
+app.get('/', (req, res) => {
+    res.send(`
+        <div style="font-family: monospace; text-align: center; margin-top: 50px;">
+            <h1>🌿 Hortus Backend</h1>
+            <p>Il server è attivo.</p>
+            <a href="/debug">Vai alla Control Room</a>
+        </div>
+    `);
+});
+
+app.get('/debug', (req, res) => {
+    const isDebug = isDebugActive();
+    const statusColor = isDebug ? '#4CAF50' : '#f44336';
+    const statusText = isDebug ? 'ATTIVO (FORZATO)' : 'DISATTIVO (STANDARD)';
+
+    res.send(`
+        <html>
+            <body style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f0f0f0;">
+                <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+                    <h1>🛠 Hortus Control Room</h1>
+                    <p>Stato attuale del Debug Mode:</p>
+                    <h2 style="color: ${statusColor}; font-size: 24px; border: 2px solid ${statusColor}; padding: 10px; border-radius: 5px;">
+                        ${statusText}
+                    </h2>
+                    
+                    <form action="/debug/toggle" method="POST" style="margin-top: 20px;">
+                        <button type="submit" style="cursor: pointer; padding: 15px 30px; font-size: 18px; background: #333; color: white; border: none; border-radius: 5px;">
+                            ${isDebug ? 'SPEGNI DEBUG' : 'ACCENDI DEBUG'}
+                        </button>
+                    </form>
+                    
+                    <p style="margin-top: 30px; color: #666; font-size: 12px;">
+                        Nota: Se attivi il debug, il sito risponderà sempre come se fosse l'orario attivo, <br>
+                        ignorando l'algoritmo temporale reale.
+                    </p>
+                    <a href="/" style="color: #333;">Torna alla Home</a>
+                </div>
+            </body>
+        </html>
+    `);
+});
+
+app.post('/debug/toggle', (req, res) => {
+    toggleDebug();
+    res.redirect('/debug');
+});
+
 app.use('/api/notizie', newsRoutes);
 
 app.get("/health", (req, res) => {
@@ -55,13 +95,11 @@ app.get("/status", (req, res) => {
     });
 });
 
-// Collega il router della chat al percorso /api/chat
 app.use('/api/chat', chatRoutes);
 
 app.use('/api/newsletter', newsletterRoutes);
 
 
-// --- AVVIO DEL SERVER ---
 app.listen(PORT, () => {
     console.log(`🚀 Server backend in ascolto sulla porta ${PORT}`);
     console.log(`   Endpoint Notizie: http://localhost:${PORT}/api/notizie/world`);

@@ -3,6 +3,7 @@ const router = express.Router();
 const { getTopStories } = require('../services/nytService');
 const { analyzeNewsSentiment } = require('../services/haikuService');
 const { checkHortusActiveWindow } = require('../services/timeService');
+const { isDebugActive } = require('../services/debugService');
 
 let cache = {
     data: null,      // Qui salviamo la risposta pronta
@@ -16,9 +17,11 @@ router.get('/:section', async (req, res) => {
     const { section } = req.params;
     const now = Date.now();
 
-    const forceActive = req.query.debug === 'true'; 
     const hortusStatus = checkHortusActiveWindow();
-    const currentIsActive = hortusStatus.isActive || forceActive;
+    const queryDebug = req.query.debug === 'true';
+    const globalDebug = isDebugActive(); 
+    
+    const currentIsActive = hortusStatus.isActive || queryDebug || globalDebug;
 
     if (cache.data && 
         cache.section === section && 
@@ -42,6 +45,8 @@ router.get('/:section', async (req, res) => {
     if (!articles) return res.status(500).json({ error: "No NYT" });
 
     let analysis;
+
+    if (globalDebug) console.log("⚠️ DEBUG GLOBALE ATTIVO: Forzo stato attivo.");
 
     if (currentIsActive) {
         console.log("⚡️ HORTUS ATTIVO: Sto chiamando l'IA per l'analisi...");
