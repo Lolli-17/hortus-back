@@ -6,6 +6,7 @@ const newsRoutes = require('./routes/newsRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const { checkHortusActiveWindow, formatTimeInZone } = require('./services/timeService');
+const { isDebugActive, toggleDebug } = require('./services/debugService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
